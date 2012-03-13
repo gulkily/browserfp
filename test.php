@@ -23,7 +23,9 @@
 				'Platform' => 6,
 				'ScreenResolution' => 7,
 				'Etag' => 8,
-				'ReturnToken' => 9
+				'ReturnToken' => 9,
+				'ScreenResolution' => 10,
+				'ValidationToken' => 11
 			);
 		}
 
@@ -94,6 +96,7 @@
 				" AND fp_record.field_value = '$fieldValue'";
 			$session_id = $this->db->get_var($query);
 
+			$this->session_id = $session_id; #todo might be a problem
 			return $session_id;
 
 		}
@@ -321,6 +324,12 @@
 			return null;
 		}
 
+		function getReturnParam($varName) {
+			if (isset($this->returned_params)) {
+				return $this->returned_params[$varName];
+			}
+		}
+
 		function getReturnToken() {
 			if (isset($this->fingerprints['ReturnToken'])) {
 				return $this->fingerprints['ReturnToken'];
@@ -329,6 +338,23 @@
 			$token = md5($this->getRemoteIp() . $this->getAcceptedFiletypes() . time() . "some salt 12435246243 jfadjfadjfjda"); #todo globalize
 
 			return $token;
+		}
+
+		function getValidationToken() {
+			if (isset($this->validation_token)) {
+				return $this->validation_token;
+			}
+
+			if (isset($_POST['token'])) {
+				$validation_token = $_POST['token'];
+			} else if (isset($_GET['token'])) {
+				$validation_token = $_GET['token'];
+			} else {
+				$validation_token = null;
+			}
+
+			$this->validation_token = $validation_token;
+			return $validation_token;
 		}
 
 

@@ -39,8 +39,7 @@
 
 	#$screen_res_token = $ss->generateScreenResolutionToken();
 
-	echo $ss->getReturnToken();
-
+	$returnToken = $ss->getReturnToken();
 ?>
 
 <table border=1>
@@ -58,6 +57,14 @@ if ($print_client_name_form) {
 <input type=text name=name>
 <input type=submit value=save>
 </form>
+
+<script>
+<!--
+	var returnToken = '<?php echo $returnToken ?>';
+	
+
+-->
+</script>
 
 <?php
 
