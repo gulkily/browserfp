@@ -26,7 +26,7 @@
 				'ScreenResHeight' => 8,
 				'Etag' => 9,
 				'ReturnToken' => 10,
-				'ValidationToken' => 10,
+				'ValidationToken' => 11
 			);
 
 			$this->printdefs2 = array();
@@ -223,6 +223,8 @@
 
 			$comma = 0;
 			foreach($this->fingerprints as $key => $value) { #todo foreach check
+				###
+
 				if ($comma > 0) $query .= ' OR '; $comma++;
 
 				$query .= "(field_id = " . $this->getDefId($key) . " AND field_value = '" . $value . "')";
