@@ -1,6 +1,6 @@
 <title>test</title>
 <?php
-	include_once('test.php');
+	include_once('sherlock.php');
 
 	$ss = new SherlockSession($db);
 
@@ -61,7 +61,11 @@ if ($print_client_name_form) {
 <script>
 <!--
 	var returnToken = '<?php echo $returnToken ?>';
+
+	var iw = window.innerWidth;
+	var ih = window.innerHeight;
 	
+	document.write('<a href="updatesession.php?token=' + returnToken + '">updatesession.php</a>');
 
 -->
 </script>

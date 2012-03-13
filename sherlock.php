@@ -4,11 +4,16 @@
 
 	$db = new ezSQL_mysql('root','','sherlock','localhost');
 
-	$tables = $db->get_results("SHOW TABLES");
+	#$tables = $db->get_results("SHOW TABLES");	
 
 	class SherlockSession {
 		function __construct($db) {
 			$this->db = $db;
+
+			$dbVersion = 3; #todo remove this hack
+			if (!$this->dbVersionCurrent($dbVersion)) {
+				die("OH NO! wrong db version!<br>check the sherlock_config table!");
+			}
 
 			$this->fingerprints = array();
 
@@ -21,12 +26,38 @@
 				'AcceptedLangs' => 4,
 				'RemoteIpBlock' => 5,
 				'Platform' => 6,
-				'ScreenResolution' => 7,
-				'Etag' => 8,
-				'ReturnToken' => 9,
-				'ScreenResolution' => 10,
-				'ValidationToken' => 11
+				'ScreenResWidth' => 7,
+				'ScreenResHeight' => 8,
+				'Etag' => 9,
+				'ReturnToken' => 10,
+				'ValidationToken' => 10,
 			);
+
+			$this->printdefs2 = array();
+
+			#todo refactor this whole thing, it will do for now
+			foreach($this->printdefs as $key => $value) {
+				$this->printdefs2[$key]->field_id = $value;
+				$this->printdefs2[$key]->field_name = $key;
+				$this->printdefs2[$key]->store = 1;
+			}
+			$this->printdefs2['ScreenResWidth']->validate = 1;
+			$this->printdefs2['ScreenResHeight']->validate = 1;
+			$this->printdefs2['ReturnToken']->validate = 1;
+			$this->printdefs2['ValidationToken']->store = 0;
+		}
+
+		function dbVersionCurrent($dbVersionExpected) {
+			$dbVersionExpected = intval($dbVersionExpected);
+			
+			$query = "SELECT value FROM sherlock_config WHERE name = 'db_version'";
+			$dbVersion = $this->db->get_var($query);
+
+			if ($dbVersion == $dbVersionExpected) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		function populateFromGlobals($globals) {
@@ -84,7 +115,7 @@
 		}
 
 		function getSessionIdFromDatapoint($fieldName, $fieldValue) {
-			$field_id = intval($this->getDefId($FieldName)); #todo some error checking
+			$field_id = intval($this->getDefId($fieldName)); #todo some error checking
 			$fieldValue = $this->db->escape($fieldValue);
 
 			$query =
@@ -170,7 +201,9 @@
 			foreach($this->fingerprints as $key => $value) { #todo optimize 5 times
 				$field_id = $this->getDefId($key);
 
-				$this->storeSessionRecord($session_id, $field_id, $value);
+				if ($this->printdefs2[$key]->store) {
+					$this->storeSessionRecord($session_id, $field_id, $value);
+				}
 			}
 		}
 
@@ -316,7 +349,11 @@
 			return $this->globals['_SERVER']['HTTP_ACCEPT_LANGUAGE'];
 		}
 
-		function getScreenResolution() {
+		function getScreenResWidth() {
+			return null;
+		}
+
+		function getScreenResHeight() {
 			return null;
 		}
 
