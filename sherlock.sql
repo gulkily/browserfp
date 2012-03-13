@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 13, 2012 at 07:50 PM
+-- Generation Time: Mar 13, 2012 at 08:26 PM
 -- Server version: 5.5.20
 -- PHP Version: 5.3.10
 
@@ -47,7 +47,12 @@ CREATE TABLE IF NOT EXISTS `client_session` (
 INSERT INTO `client_session` (`client_id`, `session_id`) VALUES
 (1, 1),
 (1, 2),
-(1, 3);
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8);
 
 -- --------------------------------------------------------
 
@@ -108,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `fp_record` (
   `field_value` varchar(255) NOT NULL,
   PRIMARY KEY (`record_id`),
   UNIQUE KEY `field_id` (`field_id`,`field_value`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `fp_record`
@@ -120,7 +125,12 @@ INSERT INTO `fp_record` (`record_id`, `field_id`, `field_value`) VALUES
 (3, 3, '127.0.0.1'),
 (4, 4, 'en-us,en;q=0.5'),
 (5, 5, '127.0.0'),
-(6, 6, 'Win7-win64');
+(6, 6, 'Win7-win64'),
+(8, 9, '0d942fe0e78b37fdee48bacb27852f8f'),
+(9, 9, '35c595bce916ea64aae1a3c3c915d742'),
+(11, 9, '64d7b18091001eded856fb5d496ab804'),
+(10, 9, '8888ea45a458ab292d91d67ff150bec9'),
+(7, 9, 'ae3f81d8719a664e5292f5a4419078f6');
 
 -- --------------------------------------------------------
 
@@ -131,7 +141,7 @@ INSERT INTO `fp_record` (`record_id`, `field_id`, `field_value`) VALUES
 CREATE TABLE IF NOT EXISTS `fp_session` (
   `session_id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`session_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `fp_session`
@@ -140,21 +150,12 @@ CREATE TABLE IF NOT EXISTS `fp_session` (
 INSERT INTO `fp_session` (`session_id`) VALUES
 (1),
 (2),
-(3);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `fp_token`
---
-
-CREATE TABLE IF NOT EXISTS `fp_token` (
-  `session_id` int(11) NOT NULL,
-  `token_string` char(40) NOT NULL,
-  `created` datetime NOT NULL,
-  PRIMARY KEY (`session_id`),
-  UNIQUE KEY `field_id` (`token_string`,`created`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+(3),
+(4),
+(5),
+(6),
+(7),
+(8);
 
 -- --------------------------------------------------------
 
@@ -200,7 +201,42 @@ INSERT INTO `session_record` (`session_id`, `record_id`, `record_timestamp`) VAL
 (3, 3, '2012-03-13 15:37:52'),
 (3, 4, '2012-03-13 15:37:52'),
 (3, 5, '2012-03-13 15:37:52'),
-(3, 6, '2012-03-13 15:37:52');
+(3, 6, '2012-03-13 15:37:52'),
+(4, 1, '2012-03-13 16:22:56'),
+(4, 2, '2012-03-13 16:22:56'),
+(4, 3, '2012-03-13 16:22:56'),
+(4, 4, '2012-03-13 16:22:56'),
+(4, 5, '2012-03-13 16:22:56'),
+(4, 6, '2012-03-13 16:22:56'),
+(4, 7, '2012-03-13 16:22:57'),
+(5, 1, '2012-03-13 16:23:21'),
+(5, 2, '2012-03-13 16:23:21'),
+(5, 3, '2012-03-13 16:23:21'),
+(5, 4, '2012-03-13 16:23:21'),
+(5, 5, '2012-03-13 16:23:21'),
+(5, 6, '2012-03-13 16:23:21'),
+(5, 8, '2012-03-13 16:23:22'),
+(6, 1, '2012-03-13 16:23:24'),
+(6, 2, '2012-03-13 16:23:24'),
+(6, 3, '2012-03-13 16:23:24'),
+(6, 4, '2012-03-13 16:23:24'),
+(6, 5, '2012-03-13 16:23:24'),
+(6, 6, '2012-03-13 16:23:24'),
+(6, 9, '2012-03-13 16:23:24'),
+(7, 1, '2012-03-13 16:24:14'),
+(7, 2, '2012-03-13 16:24:14'),
+(7, 3, '2012-03-13 16:24:14'),
+(7, 4, '2012-03-13 16:24:14'),
+(7, 5, '2012-03-13 16:24:14'),
+(7, 6, '2012-03-13 16:24:14'),
+(7, 10, '2012-03-13 16:24:14'),
+(8, 1, '2012-03-13 16:24:35'),
+(8, 2, '2012-03-13 16:24:36'),
+(8, 3, '2012-03-13 16:24:36'),
+(8, 4, '2012-03-13 16:24:36'),
+(8, 5, '2012-03-13 16:24:36'),
+(8, 6, '2012-03-13 16:24:36'),
+(8, 11, '2012-03-13 16:24:36');
 
 -- --------------------------------------------------------
 
