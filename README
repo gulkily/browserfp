@@ -1,2 +1,8 @@
+#stage
 proof of concept / prototype
+
+#todo:
+retroactive client_id updates for old sessions that were incorrectly identified
+  the client id can be more accurately matched after postback to updatesession.php
+  compare which client matches more by checking probability
 
