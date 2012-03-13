@@ -81,6 +81,23 @@
 			}
 		}
 
+		function getSessionIdFromDatapoint($fieldName, $fieldValue) {
+			$field_id = intval($this->getDefId($FieldName)); #todo some error checking
+			$fieldValue = $this->db->escape($fieldValue);
+
+			$query =
+				"SELECT session_id ".
+				" FROM fp_record, session_record ".
+				" WHERE 1=1".
+				" AND fp_record.record_id = session_record.record_id ".
+				" AND fp_record.field_id = $field_id ".
+				" AND fp_record.field_value = '$fieldValue'";
+			$session_id = $this->db->get_var($query);
+
+			return $session_id;
+
+		}
+
 		function loadFromSession($sessionId) {
 			$sessionId = intval($sessionId);
 			if (!$sessionId) return;
