@@ -1,9 +1,5 @@
 <?php
-	include_once('ez_sql_core.php');
-	include_once('ez_sql_mysql.php');
-
-	$db = new ezSQL_mysql('root','','sherlock','localhost');
-
+	include_once('database.php');
 	#$tables = $db->get_results("SHOW TABLES");	
 
 	class SherlockSession {
@@ -42,8 +38,14 @@
 				$this->printdefs2[$key]->store = 1;
 			}
 			$this->printdefs2['ScreenResWidth']->validate = 1;
+			$this->printdefs2['ScreenResWidth']->return_param = 'iw';
+			
 			$this->printdefs2['ScreenResHeight']->validate = 1;
+			$this->printdefs2['ScreenResHeight']->return_param = 'ih';
+			
 			$this->printdefs2['ReturnToken']->validate = 1;
+			$this->printdefs2['ReturnToken']->return_param = 'token';
+
 			$this->printdefs2['ValidationToken']->store = 0;
 		}
 
@@ -207,11 +209,7 @@
 			}
 		}
 
-		function getClientId() {
-			if (isset($this->client_id)) {
-				return $this->client_id;
-			}
-
+		function getClientByFingerprints() {
 			if (!count($this->fingerprints)) {
 				return;
 			}
@@ -266,7 +264,20 @@
 				}
 			}
 
-			$client_id = $this->createClient();
+			return null;
+		}
+
+		function getClientId() {
+			if (isset($this->client_id)) {
+				return $this->client_id;
+			}
+
+			$client_id = $this->getClientByFingerprints();
+
+			if (!$client_id) {
+				$client_id = $this->createClient();
+			}
+
 			return $client_id;
 		}
 

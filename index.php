@@ -1,5 +1,6 @@
 <title>test</title>
 <?php
+	include_once('database.php');
 	include_once('sherlock.php');
 
 	$ss = new SherlockSession($db);
@@ -58,18 +59,35 @@ if ($print_client_name_form) {
 <input type=submit value=save>
 </form>
 
+<?php
+
+}
+
+?>
+
 <script>
 <!--
-	var returnToken = '<?php echo $returnToken ?>';
-
 	var iw = window.innerWidth;
 	var ih = window.innerHeight;
+
+	var rurl = '';
+	function returnUrl(n, v) {
+		if (rurl == '') {
+			rurl = 'updatesession.php?token=<?php echo $returnToken ?>';
+		}
+		if (n && v) {
+			rurl = rurl + '&' + n + '=' + v;
+		}
+		return rurl;
+	}
+
+	returnUrl('iw', iw);
+	returnUrl('ih', ih);
 	
-	document.write('<a href="updatesession.php?token=' + returnToken + '">updatesession.php</a>');
+	document.write('<a href="' + returnUrl() + '">updatesession.php</a>');
 
 -->
 </script>
 
-<?php
 
-}
+<?php
