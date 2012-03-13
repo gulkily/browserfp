@@ -1,4 +1,5 @@
 <?php
+	$query_log = array(); #todo remove debug
 
 	/**********************************************************************
 	*  Author: Justin Vincent (jv@jvmultimedia.com)
@@ -200,6 +201,9 @@
 				$this->select($this->dbname);
 			}
 
+			global $query_log;
+			$query_log[] = $query;
+
 			// Perform the query via std mysql_query function..
 			$this->result = @mysql_query($query,$this->dbh);
 
@@ -267,6 +271,18 @@
 
 		}
 
+	}
+
+	function print_query_log() { #todo remove debug
+		global $query_log;
+		if (count($query_log)) { #todo remove debug
+			echo("<p>Query Count:".count($query_log).'</p>');
+			echo("<ul>");
+			foreach($query_log as $query) {
+				echo("<li>".htmlspecialchars($query)."</li>");
+			}
+			echo("</ul>");
+		}
 	}
 
 ?>

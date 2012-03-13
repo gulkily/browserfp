@@ -91,3 +91,4 @@ if ($print_client_name_form) {
 
 
 <?php
+print_query_log();

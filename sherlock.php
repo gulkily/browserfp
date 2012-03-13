@@ -25,8 +25,8 @@
 				'ScreenResWidth' => 7,
 				'ScreenResHeight' => 8,
 				'Etag' => 9,
-				'ReturnToken' => 10,
-				'ValidationToken' => 11
+				'ValidationToken' => 10,
+				'ReturnToken' => 11
 			);
 
 			$this->printdefs2 = array();
@@ -36,6 +36,7 @@
 				$this->printdefs2[$key]->field_id = $value;
 				$this->printdefs2[$key]->field_name = $key;
 				$this->printdefs2[$key]->store = 1;
+				$this->printdefs2[$key]->validate = 0;
 			}
 			$this->printdefs2['ScreenResWidth']->validate = 1;
 			$this->printdefs2['ScreenResWidth']->return_param = 'iw';
@@ -43,8 +44,9 @@
 			$this->printdefs2['ScreenResHeight']->validate = 1;
 			$this->printdefs2['ScreenResHeight']->return_param = 'ih';
 			
-			$this->printdefs2['ReturnToken']->validate = 1;
+			$this->printdefs2['ReturnToken']->validate = 0;
 			$this->printdefs2['ReturnToken']->return_param = 'token';
+			#$this->printdefs2['ReturnToken']->lookup = 0; #todo ???
 
 			$this->printdefs2['ValidationToken']->store = 0;
 		}
@@ -70,6 +72,23 @@
 			foreach($PrintDefs as $key => $value) {
 				$mn = 'get'.$value;
 				$this->fingerprints[$value] = $this->$mn();
+			}
+
+			if ($this->getValidationToken()) {
+				unset($this->fingerprints['ValidationToken']); #todo possible bug
+			} else {
+				$this->unsetFingerprintsWithValidate();
+			}
+		}
+
+		function unsetFingerprintsWithValidate() { #todo cleanup
+		#todo this needs an explanation comment
+		#todo generic function example: unsetFingerprintsByType('validate', 1);
+			
+			foreach($this->fingerprints as $key => $value) {
+				if (isset($this->printdefs2[$key]->validate) && $this->printdefs2[$key]->validate == 1) {
+					unset($this->fingerprints[$key]);
+				}
 			}
 		}
 
@@ -129,7 +148,7 @@
 				" AND fp_record.field_value = '$fieldValue'";
 			$session_id = $this->db->get_var($query);
 
-			$this->session_id = $session_id; #todo might be a problem
+			#$this->session_id = $session_id; #todo might be a problem
 			return $session_id;
 
 		}
@@ -223,8 +242,6 @@
 
 			$comma = 0;
 			foreach($this->fingerprints as $key => $value) { #todo foreach check
-				###
-
 				if ($comma > 0) $query .= ' OR '; $comma++;
 
 				$query .= "(field_id = " . $this->getDefId($key) . " AND field_value = '" . $value . "')";
@@ -362,12 +379,25 @@
 			return $this->globals['_SERVER']['HTTP_ACCEPT_LANGUAGE'];
 		}
 
-		function getScreenResWidth() {
+		function getVarFromPost($varName) {
+			$v = 'iw';
+			
+			if (isset($this->globals['_GET'][$v])) { #todo unhardcode
+				return $this->globals['_GET'][$v];
+			}
+			else if (isset($this->globals['_POST'][$v])) { #todo unhardcode
+				return $this->globals['_POST'][$v];
+			}
+
 			return null;
 		}
 
+		function getScreenResWidth() { #todo genericize
+			return $this->getVarFromPost('iw'); 
+		}
+
 		function getScreenResHeight() {
-			return null;
+			return $this->getVarFromPost('ih'); 
 		}
 
 		function getEtag() {
@@ -381,6 +411,11 @@
 		}
 
 		function getReturnToken() {
+			if (isset($this->fingerprints['ValidationToken'])) {
+				$this->printdefs2['ReturnToken']->store = 0;
+				$this->fingerprints['ReturnToken'] = $this->fingerprints['ValidationToken'];
+			}
+
 			if (isset($this->fingerprints['ReturnToken'])) {
 				return $this->fingerprints['ReturnToken'];
 			}
@@ -403,8 +438,13 @@
 				$validation_token = null;
 			}
 
-			$this->validation_token = $validation_token;
-			return $validation_token;
+			if ($validation_token) {
+				$this->old_session_id = $this->getSessionIdFromDatapoint('ValidationToken', $validation_token);
+				#$this->old_client_id = #todo
+				$this->validation_token = $validation_token; #todo is this really needed?
+				#todo remove old validation token
+				return $validation_token;
+			}
 		}
 
 

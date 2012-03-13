@@ -4,7 +4,15 @@
 
 	$ss = new SherlockSession($db);
 
-	$valid = $_GET['token'];
+	$ss->populateFromGlobals($GLOBALS);
+
+	echo('<pre>');
+	print_r($ss->fingerprints);
+
+	$ss->storeSession();
+
+	#$valid = $_GET['token'];
 
 	#$ss->populateFromGlobals($GLOBALS);
 
+	print_query_log();
