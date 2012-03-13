@@ -22,7 +22,8 @@
 				'RemoteIpBlock' => 5,
 				'Platform' => 6,
 				'ScreenResolution' => 7,
-				'Etag' => 8
+				'Etag' => 8,
+				'ReturnToken' => 9
 			);
 		}
 
@@ -310,10 +311,12 @@
 			return null;
 		}
 
-		function generateScreenResolutionToken() { #todo deprecated
-			$token = md5($this->getRemoteIp() . $this->getAcceptedFiletypes() . time() . "some salt 12435246243 jfadjfadjfjda"); #todo globalize
+		function getReturnToken() {
+			if (isset($this->fingerprints['ReturnToken'])) {
+				return $this->fingerprints['ReturnToken'];
+			}
 
-			$this->storeSessionRecord($this->session_id, 7, $token); #todo unhardcode
+			$token = md5($this->getRemoteIp() . $this->getAcceptedFiletypes() . time() . "some salt 12435246243 jfadjfadjfjda"); #todo globalize
 
 			return $token;
 		}
