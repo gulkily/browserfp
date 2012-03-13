@@ -317,13 +317,6 @@
 			return null;
 		}
 
-		function getSessionToken() {
-			$token = md5($this->getRemoteIp() . $this->getAcceptedFiletypes() . time() . "some salt 134tfqwergfq34fg78134"); #todo globalize
-
-			echo $this->getSessionId();
-
-		}
-
 		function getEtag() {
 			return null;
 		}

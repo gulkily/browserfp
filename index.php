@@ -39,7 +39,7 @@
 
 	#$screen_res_token = $ss->generateScreenResolutionToken();
 
-	echo $ss->getSessionToken();
+	echo $ss->getReturnToken();
 
 ?>
 
