@@ -359,12 +359,12 @@
 		}
 
 		function getVarFromPost($varName) {
-			$v = 'iw';
+			$v = $varName; #todo maybe some sanitizing?
 			
-			if (isset($this->globals['_GET'][$v])) { #todo unhardcode
+			if (isset($this->globals['_GET'][$v])) {
 				return $this->globals['_GET'][$v];
 			}
-			else if (isset($this->globals['_POST'][$v])) { #todo unhardcode
+			else if (isset($this->globals['_POST'][$v])) {
 				return $this->globals['_POST'][$v];
 			}
 
