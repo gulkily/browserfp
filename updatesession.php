@@ -7,12 +7,14 @@
 	$ss->populateFromGlobals($GLOBALS);
 
 	if ($ss->getValidationToken()) {
-		$ss->updateRelatedSession($ss->old_session_id);
+	#todo this should be optimized so that the old session is only loaded once
+		$ssRelated = $ss->getRelatedSession($ss->old_session_id);
+		$ss->updateRelatedSession($ssRelated);
 		$ss->setClientByFingerprints();
 	}
 
 
-	$ss->storeSession();
+	#$ss->storeSession();
 
 	#$valid = $_GET['token'];
 

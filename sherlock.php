@@ -18,11 +18,45 @@
 			$this->populateFieldDefs();
 		}
 
-		function updateRelatedSession($sessionId) {
+		function getSessionSimilarity($session, $match_only = true) {
+			/* $match_only
+					true = only datapoints present in both sessions are used
+					false = all datapoints are scored and missing datapoints count against similarity
+			*/
+
+			if ($match_only) {
+				$fields = array_intersect(
+					array_keys($this->fingerprints),
+					array_keys($session->fingerprints)
+				);
+			} else {
+				$fields = array_unique(array_merge(array_keys($this->fingerprints),	array_keys($session->fingerprints)));
+			}
+
+			$sim = 1;
+
+			foreach ($fields as $field) {
+				if ($this->fingerprints[$field] != $session->fingerprints[$field]) {
+					$sim -= 1 / count($fields);
+				}
+			}
+
+			return $sim;
+
+		}
+
+		function getRelatedSession($sessionId) {
+			$sessionId = intval($sessionId);
+			if (!$sessionId) return null;
+
+			$ssRelated = new SherlockSession($this->db);
+			$ssRelated->loadFromSession($sessionId);
+
+			return $ssRelated;
+		}
+
+		function updateRelatedSession($ssRelated) {
 			if ($this->getValidationToken()) {
-				$ssRelated = new SherlockSession($this->db);
-				$ssRelated->loadFromSession($sessionId);
-				
 				$oldClientId = $ssRelated->getClientId();
 
 				foreach($this->fingerprints as $key => $value) {
