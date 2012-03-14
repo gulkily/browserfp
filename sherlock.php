@@ -150,9 +150,10 @@
 
 			if (count($results)) { foreach($results as $row) {
 				$this->fingerprints[$this->getFieldName($row->field_id)] = $row->field_value;
-
-				$this->session_id = $sessionId;
 			}}
+
+			$this->session_id = $sessionId;
+			$this->client_id = $this->getClientIdBySessionId($sessionId);
 		}
 
 		#function 
@@ -217,7 +218,7 @@
 			}
 		}
 
-		function getClientByFingerprints() {
+		function setClientByFingerprints() {
 			if (!count($this->fingerprints)) {
 				return;
 			}
@@ -265,6 +266,7 @@
 
 				foreach ($cp as $client => $probability) {
 					if ($probability > 0.5) { #todo make this configurable or calculated
+						#echo ("<h1>".$probability."</h1>");
 						$this->client_id = $client;
 						$this->probability = $probability;
 						return $client;
@@ -280,7 +282,7 @@
 				return $this->client_id;
 			}
 
-			$client_id = $this->getClientByFingerprints();
+			$client_id = $this->setClientByFingerprints();
 
 			if (!$client_id) {
 				$client_id = $this->createClient();
