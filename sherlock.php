@@ -6,7 +6,7 @@
 		function __construct($db) {
 			$this->db = $db;
 
-			$dbVersion = 5; #todo remove this hack
+			$dbVersion = 7; #todo remove this hack
 			if (!$this->dbVersionCurrent($dbVersion)) {
 				die("OH NO! wrong db version!<br>check the sherlock_config table!");
 			}
@@ -90,7 +90,7 @@
 		}
 
 		function populateFieldDefs() {
-			$fp_fields = $this->db->get_results("SELECT * FROM fp_fields"); #todo caching and active flag
+			$fp_fields = $this->db->get_results("SELECT * FROM fp_field"); #todo caching and active flag
 
 			foreach($fp_fields as $field) {
 				$fields[$field->field_name] = $field;
@@ -142,6 +142,29 @@
 					unset($this->fingerprints[$key]);
 				}
 			}
+		}
+
+		function getClientRecords() {
+			$clientId = $this->getClientId();
+			if (!$clientId) return null;
+
+			$query =
+				"SELECT DISTINCT fp_field.field_name, fp_record.field_value ".
+				"FROM client_record_v, fp_record, fp_field ".
+				"WHERE 1=1 ".
+				"AND client_record_v.client_id = $clientId ".
+				"AND client_record_v.record_id = fp_record.record_id ".
+				"AND fp_record.field_id = fp_field.field_id";
+
+			$records = $this->db->get_results($query);
+	
+			#todo this needs a lot of optimization
+
+			foreach ($records as $rec) {
+				$clientRecords[$rec->field_name][] = $rec->field_value;
+			}
+
+			return $clientRecords;
 		}
 
 //

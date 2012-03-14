@@ -276,7 +276,7 @@
 	function print_query_log() { #todo remove debug
 		global $query_log;
 		if (count($query_log)) { #todo remove debug
-			echo('<p><a onClick="document.getElementById(\'qlog\').style.display = \'block\';">Query Count: '.count($query_log).'</a></p>');
+			echo('<p><a href="" onClick="document.getElementById(\'qlog\').style.display = \'block\';return false;">Query Count: '.count($query_log).'</a></p>');
 			echo('<div id=qlog style="display:none"><ul>');
 			foreach($query_log as $query) {
 				echo("<li>".htmlspecialchars($query)."</li>");

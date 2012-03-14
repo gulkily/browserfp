@@ -41,6 +41,9 @@
 	#$screen_res_token = $ss->generateScreenResolutionToken();
 
 	$returnToken = $ss->getReturnToken();
+
+	#echo('<pre>');
+	#print_r($ss->getClientRecords());
 ?>
 
 <table border=1>
@@ -83,8 +86,10 @@ if ($print_client_name_form) {
 
 	var d = new Date();
 	returnUrl('toff', Math.round(<?php echo time()?> - d.getTime()/1000));
+
+	document.write('<img src="' + returnUrl() + '">');
 	
-	document.write('<a href="' + returnUrl() + '">updatesession.php</a>');
+	document.write('<a href="' + returnUrl() + '&verbose=1">updatesession.php</a>');
 
 -->
 </script>
