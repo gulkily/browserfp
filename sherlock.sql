@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 14, 2012 at 05:37 AM
+-- Generation Time: Mar 14, 2012 at 03:49 PM
 -- Server version: 5.5.20
 -- PHP Version: 5.3.10
 
@@ -76,23 +76,23 @@ CREATE TABLE IF NOT EXISTS `fp_client` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `fp_defs`
+-- Table structure for table `fp_fields`
 --
 
-CREATE TABLE IF NOT EXISTS `fp_defs` (
-  `def_id` int(11) NOT NULL,
-  `def_name` varchar(32) NOT NULL,
+CREATE TABLE IF NOT EXISTS `fp_fields` (
+  `field_id` int(11) NOT NULL,
+  `field_name` varchar(32) NOT NULL,
   `store` tinyint(1) NOT NULL,
   `validate` tinyint(1) NOT NULL,
   `return_param` char(16) DEFAULT NULL,
-  PRIMARY KEY (`def_id`)
+  PRIMARY KEY (`field_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `fp_defs`
+-- Dumping data for table `fp_fields`
 --
 
-INSERT INTO `fp_defs` (`def_id`, `def_name`, `store`, `validate`, `return_param`) VALUES
+INSERT INTO `fp_fields` (`field_id`, `field_name`, `store`, `validate`, `return_param`) VALUES
 (1, 'Useragent', 1, 0, ''),
 (2, 'SessionCookie', 1, 0, ''),
 (3, 'RemoteIp', 1, 0, ''),
@@ -103,7 +103,8 @@ INSERT INTO `fp_defs` (`def_id`, `def_name`, `store`, `validate`, `return_param`
 (8, 'ScreenResHeight', 1, 1, 'ih'),
 (9, 'Etag', 1, 0, ''),
 (10, 'ValidationToken', 0, 0, ''),
-(11, 'ReturnToken', 1, 0, 'token');
+(11, 'ReturnToken', 1, 0, 'token'),
+(12, 'TimeOffset', 1, 1, 'toff');
 
 -- --------------------------------------------------------
 
@@ -169,7 +170,7 @@ CREATE TABLE IF NOT EXISTS `sherlock_config` (
 --
 
 INSERT INTO `sherlock_config` (`name`, `value`) VALUES
-('db_version', '3');
+('db_version', '5');
 
 -- --------------------------------------------------------
 

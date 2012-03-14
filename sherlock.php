@@ -6,7 +6,7 @@
 		function __construct($db) {
 			$this->db = $db;
 
-			$dbVersion = 4; #todo remove this hack
+			$dbVersion = 5; #todo remove this hack
 			if (!$this->dbVersionCurrent($dbVersion)) {
 				die("OH NO! wrong db version!<br>check the sherlock_config table!");
 			}
@@ -15,20 +15,20 @@
 
 			$this->tokens = array();
 
-			$this->populatePrintDefs();
+			$this->populateFieldDefs();
 		}
 
-		function populatePrintDefs() {
-			$fp_defs = $this->db->get_results("SELECT * FROM fp_defs"); #todo caching and active flag
+		function populateFieldDefs() {
+			$fp_fields = $this->db->get_results("SELECT * FROM fp_fields"); #todo caching and active flag
 
-			foreach($fp_defs as $fp_def) {
-				$defs[$fp_def->def_name] = $fp_def;
+			foreach($fp_fields as $field) {
+				$fields[$field->field_name] = $field;
 
-				$defs_nl[$fp_def->def_id] = $fp_def->def_name;
+				$fields_nl[$field->field_id] = $field->field_name;
 			}
 
-			$this->printdefs2 = $defs;
-			$this->printdefs_name_lookup = $defs_nl;
+			$this->fpFields = $fields;
+			$this->fpFieldNames = $fields_nl;
 		}
 
 		function dbVersionCurrent($dbVersionExpected) {
@@ -45,7 +45,7 @@
 		}
 
 		function populateFromGlobals($globals) {
-			$PrintDefs = $this->printdefs_name_lookup;
+			$PrintDefs = $this->fpFieldNames;
 
 			$this->globals = $globals;
 
@@ -67,23 +67,23 @@
 		#todo generic function example: unsetFingerprintsByType('validate', 1);
 			
 			foreach($this->fingerprints as $key => $value) {
-				if (isset($this->printdefs2[$key]->validate) && $this->printdefs2[$key]->validate == 1) {
+				if (isset($this->fpFields[$key]->validate) && $this->fpFields[$key]->validate == 1) {
 					unset($this->fingerprints[$key]);
 				}
 			}
 		}
 
 //
-		function getDefId($defName) {
-			if (isset($this->printdefs2[$defName])) {
-				return $this->printdefs2[$defName]->def_id;
+		function getFieldId($defName) {
+			if (isset($this->fpFields[$defName])) {
+				return $this->fpFields[$defName]->field_id;
 			} else {
 				return null;
 			}
 		}
 
-		function getDefName($defId) {
-			$defs = $this->printdefs_name_lookup;
+		function getFieldName($defId) {
+			$defs = $this->fpFieldNames;
 
 			if (isset($defs[$defId])) {
 				return $defs[$defId];
@@ -116,7 +116,7 @@
 		}
 
 		function getSessionIdFromDatapoint($fieldName, $fieldValue) {
-			$field_id = intval($this->getDefId($fieldName)); #todo some error checking
+			$field_id = intval($this->getFieldId($fieldName)); #todo some error checking
 			$fieldValue = $this->db->escape($fieldValue);
 
 			$query =
@@ -149,7 +149,7 @@
 			$results = $this->db->get_results($query);
 
 			if (count($results)) { foreach($results as $row) {
-				$this->fingerprints[$this->getDefName($row->field_id)] = $row->field_value;
+				$this->fingerprints[$this->getFieldName($row->field_id)] = $row->field_value;
 
 				$this->session_id = $sessionId;
 			}}
@@ -170,7 +170,7 @@
 				return;
 			}
 
-			if (!isset($this->printdefs2[$this->getDefName($fieldId)]->store) || !$this->printdefs2[$this->getDefName($fieldId)]->store) {
+			if (!isset($this->fpFields[$this->getFieldName($fieldId)]->store) || !$this->fpFields[$this->getFieldName($fieldId)]->store) {
 				die('trying to store datapoint that shouldn\'t be stored!'); #just a sanity check
 			}
 
@@ -198,7 +198,7 @@
 				$this->db->query($query);
 
 				if ($sessionId == $this->session_id) {
-					$this->fingerprints[$this->getDefName($fieldId)] = $fieldValue;
+					$this->fingerprints[$this->getFieldName($fieldId)] = $fieldValue;
 				}
 
 				return $this->db->insert_id;
@@ -209,9 +209,9 @@
 			$session_id = $this->createSession();
 
 			foreach($this->fingerprints as $key => $value) { #todo optimize 5 times
-				$field_id = $this->getDefId($key);
+				$field_id = $this->getFieldId($key);
 
-				if ($this->printdefs2[$key]->store) {
+				if ($this->fpFields[$key]->store) {
 					$this->storeSessionRecord($session_id, $field_id, $value);
 				}
 			}
@@ -233,7 +233,7 @@
 			foreach($this->fingerprints as $key => $value) { #todo foreach check
 				if ($comma > 0) $query .= ' OR '; $comma++;
 
-				$query .= "(field_id = " . $this->getDefId($key) . " AND field_value = '" . $value . "')";
+				$query .= "(field_id = " . $this->getFieldId($key) . " AND field_value = '" . $value . "')";
 			}
 
 			$result = $this->db->get_results($query);
@@ -418,7 +418,7 @@
 
 		function getReturnToken() {
 			if (isset($this->fingerprints['ValidationToken'])) {
-				$this->printdefs2['ReturnToken']->store = 0;
+				$this->fpFields['ReturnToken']->store = 0;
 				$this->fingerprints['ReturnToken'] = $this->fingerprints['ValidationToken'];
 			}
 
