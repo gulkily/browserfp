@@ -5,6 +5,7 @@ TODO
   * compare which client matches more by checking probability
 * update SELECT statements to use filtered views where possible (e.g. for flags like deleted or active)
 * modularize the javascript a little so that SherlockSession has a getJsBlock() method
+* add pretty output of all tracked datapoints for user's pleasure
 
 BRAINSTORM
 
