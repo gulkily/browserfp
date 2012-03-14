@@ -89,11 +89,11 @@ if ($print_client_name_form) {
 
 	document.write('<img src="' + returnUrl() + '">');
 	
-	document.write('<a href="' + returnUrl() + '&verbose=1">updatesession.php</a>');
+	//document.write('<a href="' + returnUrl() + '&verbose=1">updatesession.php</a>');
 
 -->
 </script>
 
 
 <?php
-print_query_log();
+#print_query_log();
