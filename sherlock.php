@@ -15,40 +15,20 @@
 
 			$this->tokens = array();
 
-			$this->printdefs = array(
-				'Useragent' => 1,
-				'SessionCookie' => 2,
-				'RemoteIp' => 3,
-				'AcceptedLangs' => 4,
-				'RemoteIpBlock' => 5,
-				'Platform' => 6,
-				'ScreenResWidth' => 7,
-				'ScreenResHeight' => 8,
-				'Etag' => 9,
-				'ValidationToken' => 10,
-				'ReturnToken' => 11
-			);
+			$this->populatePrintDefs();
+		}
 
-			$this->printdefs2 = array();
+		function populatePrintDefs() {
+			$fp_defs = $this->db->get_results("SELECT * FROM fp_defs"); #todo caching and active flag
 
-			#todo refactor this whole thing, it will do for now
-			foreach($this->printdefs as $key => $value) {
-				$this->printdefs2[$key]->field_id = $value;
-				$this->printdefs2[$key]->field_name = $key;
-				$this->printdefs2[$key]->store = 1;
-				$this->printdefs2[$key]->validate = 0;
+			foreach($fp_defs as $fp_def) {
+				$defs[$fp_def->def_name] = $fp_def;
+
+				$defs_nl[$fp_def->def_id] = $fp_def->def_name;
 			}
-			$this->printdefs2['ScreenResWidth']->validate = 1;
-			$this->printdefs2['ScreenResWidth']->return_param = 'iw';
-			
-			$this->printdefs2['ScreenResHeight']->validate = 1;
-			$this->printdefs2['ScreenResHeight']->return_param = 'ih';
-			
-			$this->printdefs2['ReturnToken']->validate = 0;
-			$this->printdefs2['ReturnToken']->return_param = 'token';
-			#$this->printdefs2['ReturnToken']->lookup = 0; #todo ???
 
-			$this->printdefs2['ValidationToken']->store = 0;
+			$this->printdefs2 = $defs;
+			$this->printdefs_name_lookup = $defs_nl;
 		}
 
 		function dbVersionCurrent($dbVersionExpected) {
@@ -65,7 +45,7 @@
 		}
 
 		function populateFromGlobals($globals) {
-			$PrintDefs = array_keys($this->printdefs);
+			$PrintDefs = $this->printdefs_name_lookup;
 
 			$this->globals = $globals;
 
@@ -93,17 +73,15 @@
 		}
 
 		function getDefId($defName) {
-			$defs = $this->printdefs;
-
-			if (isset($defs[$defName])) {
-				return $defs[$defName];
+			if (isset($this->printdefs2[$defName])) {
+				return $this->printdefs2[$defName]->def_id;
 			} else {
 				return null;
 			}
 		}
 
 		function getDefName($defId) {
-			$defs = array_flip($this->printdefs);
+			$defs = $this->printdefs_name_lookup;
 
 			if (isset($defs[$defId])) {
 				return $defs[$defId];
