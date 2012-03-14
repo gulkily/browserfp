@@ -1,8 +1,30 @@
-#stage
+OVERVIEW
+
+a framework for identifying web clients based on various commonly available datapoints
+
+DEVELOPMENT STAGE
+
 proof of concept / prototype
 
-#todo:
-retroactive client_id updates for old sessions that were incorrectly identified
-  the client id can be more accurately matched after postback to updatesession.php
-  compare which client matches more by checking probability
+PURPOSE
 
+to demonstrate ease of tracking web clients using commonly divulged data
+
+OTHER POSSIBLE USES
+
+* reduce occurrence of ballot stuffing in online voting
+* gain better understanding of user base
+* improve account security by identifying unusual activity
+* blacklisting of undesirable clients, e.g. frequent trolls
+
+DATAPOINTS SUPPORTED
+
+* cookie
+* useragent
+  * os
+* client ip
+  * client ip block
+* accepted languages
+
+* browser height
+* browser width

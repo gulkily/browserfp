@@ -1,0 +1,72 @@
+TODO
+
+* retroactive client_id updates for old sessions that were incorrectly identified
+  * the client id can be more accurately matched after postback to updatesession.php
+  * compare which client matches more by checking probability
+* update SELECT statements to use filtered views where possible (e.g. for flags like deleted or active)
+* modularize the javascript a little so that SherlockSession has a getJsBlock() method
+* clean up printdefs/printdefs2 and move the definitions to config table
+* add "method" parameter to printdefs (http, js, ?)
+
+BRAINSTORM
+
+* do something with unclaimed tokens and cookies
+* how to use non-matches to increase accuracy?
+* blacklist abusive clients
+* deal with clients that block cookies
+  * clean up unclaimed cookies in fp_record
+  * flag clients that repeatedly don't claim cookies?
+* use hotness formula based on session_record timestamps (newer = more likely)
+* integrate evercookie
+* integrate cache.php
+* create profiles / modes to use (e.g. silent, cookie-based, aggressive, etc.)
+  * sets of datapoints to use / ignore
+  * programmatically switch profiles as necessary
+  * modes: listen only, average, full/aggressive
+* user-controlled linking of sessions and clients by means of self-identifcation (login)
+* how to detect mismatched cookies and make things right in the world
+* statistics / reporting
+  * datapoint variance
+  * most useful/useless datapoints
+
+RESEARCH / DOCUMENT
+
+* what datapoints are protected by:
+  * clear private data feature in each browser
+  * vpn / proxies
+  * tor
+* framework for generating urls with various behaviors
+  * etag tracking
+  * cache timestamp tracking
+* defenses against intentional data poisoning
+* clustering of datapoints for multiple clients / locations / devices
+* fuzzier matching
+
+DATAPOINTS PLANNED
+
+* if-mod-since header (token)
+* etag / if-none-match header (token)
+* client timezone (js)
+* client time offset from server (js)
+* capabilities / plugins (js)
+
+DATAPOINTS UNDER CONSIDERATION
+
+* page visits
+  * resource + referring resource
+  * accessed resource
+  * order of visits and links clicked
+* referring domain / referring url
+* request round-trip time (measured by js, cluster/bucket)
+* cached / uncached or requested / unrequested resources
+* javascript benchmarks
+* network metrics
+* requested resource files cached html (?)
+  * refer to resource that returns no-cache headers (?)
+  * i copied this straight from my notes. hopefully i'll remember what i meant at a later time
+* window.name (thanks samy)
+* geolocation, whether through own database or third-party service
+* visited links (?)
+* javascript disabled (via <noscript><img>)
+* video/audio volume attribute (desktop only)
+* third-party identifier
