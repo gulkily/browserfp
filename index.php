@@ -5,7 +5,15 @@
 
 	$ss = new SherlockSession($db);
 
-	$ss->populateFromGlobals($GLOBALS);
+	#todo this $ggg thing is a workaround until i figure out why $GLOBALS doesn't work everywhere
+	$ggg = array();
+
+	$ggg['_SERVER'] = $_SERVER;
+	$ggg['_GET'] = $_GET;
+	$ggg['_POST'] = $_POST;
+	$ggg['_COOKIE'] = $_COOKIE;
+
+	$ss->populateFromGlobals($ggg);
 
 	$ss->storeSession();
 
