@@ -6,8 +6,13 @@
 
 	$ss->populateFromGlobals($GLOBALS);
 
-	$ss->storeSession();
+	if ($ss->getValidationToken()) {
+		$ss->updateRelatedSession($ss->old_session_id);
+		$ss->setClientByFingerprints();
+	}
 
+
+	$ss->storeSession();
 
 	#$valid = $_GET['token'];
 

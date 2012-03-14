@@ -20,7 +20,7 @@
 
 		function updateRelatedSession($sessionId) {
 			if ($this->getValidationToken()) {
-				$ssRelated = new SherlockSession($db);
+				$ssRelated = new SherlockSession($this->db);
 				$ssRelated->loadFromSession($sessionId);
 				
 				$oldClientId = $ssRelated->getClientId();
@@ -307,6 +307,7 @@
 						#echo ("<h1>".$probability."</h1>");
 						$this->client_id = $client;
 						$this->probability = $probability;
+
 						return $client;
 					}
 				}
