@@ -14,9 +14,11 @@
 		
 		foreach($ss->fingerprints as $key => $value) {
 			if (!isset($ss_old->fingerprints[$key])) {
-				$ss_old->storeSessionRecord($ss_old->session_id, $ss_old->getDefId($key), $ss->fingerprints[$key]);
+				$ss_old->storeSessionRecord($ss_old->session_id, $ss_old->getFieldId($key), $ss->fingerprints[$key]);
 			}
 		}
+
+		#echo $ss_old->getClientId();
 	}
 
 	#$valid = $_GET['token'];
