@@ -28,3 +28,21 @@ DATAPOINTS SUPPORTED
 
 * browser height
 * browser width
+
+FILES
+
+database.php
+  just the database config
+ez_sql_core.php
+ez_sql_mysql.php
+  parts of ezSQL for easy prototyping (thanks jv!)
+index.php
+  just a wrapper
+purge.php
+  purges all tracking data from the db - no warning!
+sherlock.php
+  where all the fun stuff happens
+sherlock.sql
+  database structure and some random data
+updatesession.php
+  used to log tokened datapoins from js, img tags, and the like
