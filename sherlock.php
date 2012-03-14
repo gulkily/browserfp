@@ -6,7 +6,7 @@
 		function __construct($db) {
 			$this->db = $db;
 
-			$dbVersion = 3; #todo remove this hack
+			$dbVersion = 4; #todo remove this hack
 			if (!$this->dbVersionCurrent($dbVersion)) {
 				die("OH NO! wrong db version!<br>check the sherlock_config table!");
 			}
@@ -72,6 +72,7 @@
 			}
 		}
 
+//
 		function getDefId($defName) {
 			if (isset($this->printdefs2[$defName])) {
 				return $this->printdefs2[$defName]->def_id;
@@ -376,6 +377,10 @@
 
 		function getScreenResHeight() {
 			return $this->getVarFromPost('ih'); 
+		}
+
+		function getTimeOffset() {
+			return $this->getVarFromPost('toff');
 		}
 
 		function getEtag() {

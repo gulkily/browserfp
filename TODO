@@ -5,11 +5,10 @@ TODO
   * compare which client matches more by checking probability
 * update SELECT statements to use filtered views where possible (e.g. for flags like deleted or active)
 * modularize the javascript a little so that SherlockSession has a getJsBlock() method
-* clean up printdefs/printdefs2 and move the definitions to config table
-* add "method" parameter to printdefs (http, js, ?)
 
 BRAINSTORM
 
+* add "method" parameter to printdefs (http, js, ?) (for what?)
 * do something with unclaimed tokens and cookies
 * how to use non-matches to increase accuracy?
 * blacklist abusive clients
@@ -31,7 +30,7 @@ BRAINSTORM
 
 RESEARCH / DOCUMENT
 
-* what datapoints are protected by:
+* what datapoints are protected/cleared by:
   * clear private data feature in each browser
   * vpn / proxies
   * tor

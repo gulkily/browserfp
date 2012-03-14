@@ -67,9 +67,6 @@ if ($print_client_name_form) {
 
 <script>
 <!--
-	var iw = window.innerWidth;
-	var ih = window.innerHeight;
-
 	var rurl = '';
 	function returnUrl(n, v) {
 		if (rurl == '') {
@@ -81,8 +78,11 @@ if ($print_client_name_form) {
 		return rurl;
 	}
 
-	returnUrl('iw', iw);
-	returnUrl('ih', ih);
+	returnUrl('iw', window.innerWidth);
+	returnUrl('ih', window.innerHeight);
+
+	var d = new Date();
+	returnUrl('toff', Math.round(<?php echo time()?> - d.getTime()/1000));
 	
 	document.write('<a href="' + returnUrl() + '">updatesession.php</a>');
 

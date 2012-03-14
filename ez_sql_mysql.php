@@ -276,12 +276,12 @@
 	function print_query_log() { #todo remove debug
 		global $query_log;
 		if (count($query_log)) { #todo remove debug
-			echo("<p>Query Count:".count($query_log).'</p>');
-			echo("<ul>");
+			echo('<p><a onClick="document.getElementById(\'qlog\').style.display = \'block\';">Query Count: '.count($query_log).'</a></p>');
+			echo('<div id=qlog style="display:none"><ul>');
 			foreach($query_log as $query) {
 				echo("<li>".htmlspecialchars($query)."</li>");
 			}
-			echo("</ul>");
+			echo("</ul></div>");
 		}
 	}
 
