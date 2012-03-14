@@ -18,6 +18,44 @@
 			$this->populateFieldDefs();
 		}
 
+		function updateRelatedSession($sessionId) {
+			if ($this->getValidationToken()) {
+				$ssRelated = new SherlockSession($db);
+				$ssRelated->loadFromSession($sessionId);
+				
+				$oldClientId = $ssRelated->getClientId();
+
+				foreach($this->fingerprints as $key => $value) {
+					if (!isset($ssRelated->fingerprints[$key])) {
+						$ssRelated->storeSessionRecord($ssRelated->session_id, $ssRelated->getFieldId($key), $this->fingerprints[$key]);
+					}
+				}
+
+				$ssRelated->setClientByFingerprints();
+				$newClientId = $ssRelated->getClientId();
+
+				if ($oldClientId != $newClientId) {
+					$ssRelated->setClientId($newClientId);
+				}
+
+				if ($this->getClientId() != $ssRelated->getClientId()) {
+					die ('have not thought of this yet'); #todo
+				}
+			}
+		}
+
+		function setClientId($clientId) {
+			$clientId = intval($clientId);
+			$sessionId = intval($this->session_id);
+
+			if (!$clientId || !$sessionId) {
+				return;
+			}
+
+			$query = "UPDATE client_session SET client_id = $clientId WHERE session_id = $sessionId";
+			$db->query($query);
+		}
+
 		function populateFieldDefs() {
 			$fp_fields = $this->db->get_results("SELECT * FROM fp_fields"); #todo caching and active flag
 
