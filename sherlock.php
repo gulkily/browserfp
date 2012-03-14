@@ -56,6 +56,7 @@
 
 			if ($this->getValidationToken()) {
 				unset($this->fingerprints['ValidationToken']); #todo possible bug
+				$this->old_client_id = $this->getClientIdBySessionId($this->old_session_id); #todo this is all sorts of bad in one line
 			} else {
 				$this->unsetFingerprintsWithValidate();
 			}
@@ -125,6 +126,7 @@
 				" AND fp_record.record_id = session_record.record_id ".
 				" AND fp_record.field_id = $field_id ".
 				" AND fp_record.field_value = '$fieldValue'";
+
 			$session_id = $this->db->get_var($query);
 
 			#$this->session_id = $session_id; #todo might be a problem
@@ -168,28 +170,36 @@
 				return;
 			}
 
+			if (!isset($this->printdefs2[$this->getDefName($fieldId)]->store) || !$this->printdefs2[$this->getDefName($fieldId)]->store) {
+				die('trying to store datapoint that shouldn\'t be stored!'); #just a sanity check
+			}
+
 			#todo eliminate field_id lookup
-			$fieldValue = $this->db->escape($fieldValue);
+			$fieldValue_e = $this->db->escape($fieldValue);
 
 			#todo fix this to not use an extra query
 			$query = 
 				"SELECT record_id FROM fp_record WHERE ".
-				"field_id = $fieldId AND field_value = '$fieldValue'";
+				"field_id = $fieldId AND field_value = '$fieldValue_e'";
 			$record_id = $this->db->get_var($query);
 
 			if (!$record_id) {
 				$query = "INSERT IGNORE INTO fp_record(field_id, field_value) VALUES ";
-				$query .= "($fieldId,'$fieldValue')";
+				$query .= "($fieldId,'$fieldValue_e')";
 				$this->db->query($query);
 
 				$record_id = $this->db->insert_id;
 			}
-								
+
 			if ($record_id) {
 				$query = 
 					"INSERT INTO session_record(session_id, record_id, record_timestamp) ".
 					"VALUES($sessionId, $record_id, NOW())"; #todo use server time instead
 				$this->db->query($query);
+
+				if ($sessionId == $this->session_id) {
+					$this->fingerprints[$this->getDefName($fieldId)] = $fieldValue;
+				}
 
 				return $this->db->insert_id;
 			}
@@ -275,6 +285,19 @@
 			if (!$client_id) {
 				$client_id = $this->createClient();
 			}
+
+			return $client_id;
+		}
+
+		function getClientIdBySessionId($sessionId) {
+			$sessionId = intval($sessionId);
+			if (!$sessionId) return null;
+
+			$query =
+				"SELECT DISTINCT client_id ".
+				" FROM client_session".
+				" WHERE session_id = $sessionId ";
+			$client_id = $this->db->get_var($query);
 
 			return $client_id;
 		}
@@ -422,7 +445,8 @@
 			}
 
 			if ($validation_token) {
-				$this->old_session_id = $this->getSessionIdFromDatapoint('ValidationToken', $validation_token);
+				$this->old_session_id = $this->getSessionIdFromDatapoint('ReturnToken', $validation_token);
+				
 				#$this->old_client_id = #todo
 				$this->validation_token = $validation_token; #todo is this really needed?
 				#todo remove old validation token

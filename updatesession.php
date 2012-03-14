@@ -6,10 +6,18 @@
 
 	$ss->populateFromGlobals($GLOBALS);
 
-	echo('<pre>');
-	print_r($ss->fingerprints);
-
 	$ss->storeSession();
+
+	if ($ss->getValidationToken()) {
+		$ss_old = new SherlockSession($db);
+		$ss_old->loadFromSession($ss->old_session_id);
+		
+		foreach($ss->fingerprints as $key => $value) {
+			if (!isset($ss_old->fingerprints[$key])) {
+				$ss_old->storeSessionRecord($ss_old->session_id, $ss_old->getDefId($key), $ss->fingerprints[$key]);
+			}
+		}
+	}
 
 	#$valid = $_GET['token'];
 
