@@ -42,7 +42,6 @@
 			}
 
 			return $sim;
-
 		}
 
 		function getRelatedSession($sessionId) {
@@ -529,6 +528,22 @@
 			}
 		}
 
+		function deleteValidationToken() {
+			$token = $this->getValidationToken();
 
+			#todo this could use some optimizing, we can just grab the record_id during getValidationToken()
+			#todo hardcoded field_id
 
+			$record_id = $this->db->get_var("SELECT record_id FROM fp_record WHERE field_id = 11 AND field_value = '$token'");
+
+			$this->db->query("DELETE FROM session_record WHERE record_id = $record_id AND session_id = ".$this->getSessionId());
+
+			if ($this->db->rows_affected > 1) { #sanity check
+				die ('more than 1 row deleted in deleteValidationToken()! something went horribly wrong!');
+			}
+
+			if ($this->db->rows_affected == 1) {
+				$this->db->query("DELETE FROM fp_record WHERE record_id = $record_id");
+			}
+		}
 	}
