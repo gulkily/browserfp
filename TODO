@@ -29,7 +29,7 @@ BRAINSTORM
   * datapoint variance
   * most useful/useless datapoints
 
-RESEARCH / DOCUMENT
+RESEARCH
 
 * what datapoints are protected/cleared by:
   * clear private data feature in each browser
@@ -42,15 +42,16 @@ RESEARCH / DOCUMENT
 * clustering of datapoints for multiple clients / locations / devices
 * fuzzier matching
 
-DATAPOINTS PLANNED
+PLANNED
 
 * if-mod-since header (token)
 * etag / if-none-match header (token)
 * client timezone (js)
 * client time offset from server (js)
 * capabilities / plugins (js)
+* installed fonts
 
-DATAPOINTS UNDER CONSIDERATION
+UNDER CONSIDERATION
 
 * page visits
   * resource + referring resource

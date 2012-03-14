@@ -301,6 +301,7 @@
 		}
 
 		function storeSession() {
+			echo('storesession');
 			$session_id = $this->createSession();
 
 			foreach($this->fingerprints as $key => $value) { #todo optimize 5 times

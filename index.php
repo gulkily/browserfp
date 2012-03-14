@@ -95,13 +95,13 @@ if ($print_client_name_form) {
 	var d = new Date();
 	returnUrl('toff', Math.round(<?php echo time()?> - d.getTime()/1000));
 
-	document.write('<img src="' + returnUrl() + '">');
-	
-	//document.write('<a href="' + returnUrl() + '&verbose=1">updatesession.php</a>');
+	document.write('<p><a href="' + returnUrl() + '&verbose=1">call updatesession.php manually</a></p>');
+
+	document.write('<p>tracking gif: <img src="' + returnUrl() + '"></p>');
 
 -->
 </script>
 
 
 <?php
-#print_query_log();
+print_query_log();

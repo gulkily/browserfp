@@ -1,10 +1,12 @@
 OVERVIEW
 
 a framework for identifying web clients based on commonly available datapoints
+currently in prototype stage, don't expect any pretty code
 
-DEVELOPMENT STAGE
+KNOWN ISSUES
 
-proof of concept / prototype
+before importing sherlock.sql, you have to remove all instances of this line:
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 
 PURPOSE
 
