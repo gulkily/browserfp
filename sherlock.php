@@ -215,9 +215,9 @@
 
 			$query =
 				"SELECT session_id ".
-				" FROM fp_record, session_record ".
+				" FROM fp_record, session_record_active ".
 				" WHERE 1=1".
-				" AND fp_record.record_id = session_record.record_id ".
+				" AND fp_record.record_id = session_record_active.record_id ".
 				" AND fp_record.field_id = $field_id ".
 				" AND fp_record.field_value = '$fieldValue'";
 
@@ -235,10 +235,10 @@
 			$query = 
 				"SELECT fp_record.field_id, fp_record.field_value ".
 				" FROM ".
-				" fp_session, session_record, fp_record ".
+				" fp_session, session_record_active, fp_record ".
 				" WHERE " .
-				" fp_session.session_id = session_record.session_id ".
-				" AND session_record.record_id = fp_record.record_id ".
+				" fp_session.session_id = session_record_active.session_id ".
+				" AND session_record_active.record_id = fp_record.record_id ".
 				" AND fp_session.session_id = $sessionId";
 			$results = $this->db->get_results($query);
 
@@ -288,7 +288,7 @@
 
 			if ($record_id) {
 				$query = 
-					"INSERT INTO session_record(session_id, record_id, record_timestamp) ".
+					"INSERT INTO session_record_active(session_id, record_id, record_timestamp) ".
 					"VALUES($sessionId, $record_id, NOW())"; #todo use server time instead
 				$this->db->query($query);
 
@@ -301,7 +301,6 @@
 		}
 
 		function storeSession() {
-			echo('storesession');
 			$session_id = $this->createSession();
 
 			foreach($this->fingerprints as $key => $value) { #todo optimize 5 times
@@ -560,14 +559,15 @@
 
 			$record_id = $this->db->get_var("SELECT record_id FROM fp_record WHERE field_id = 11 AND field_value = '$token'");
 
-			$this->db->query("DELETE FROM session_record WHERE record_id = $record_id AND session_id = ".$this->getSessionId());
+			$this->db->query("UPDATE session_record SET active = 0 WHERE record_id = $record_id AND session_id = ".$this->getSessionId());
 
 			if ($this->db->rows_affected > 1) { #sanity check
-				die ('more than 1 row deleted in deleteValidationToken()! something went horribly wrong!');
+				die ('more than 1 row set inactive in deleteValidationToken()! something went horribly wrong!');
 			}
 
 			if ($this->db->rows_affected == 1) {
-				$this->db->query("DELETE FROM fp_record WHERE record_id = $record_id");
+				//$this->db->query("DELETE FROM fp_record WHERE record_id = $record_id");
+				#todo think about what leaving this behind entails
 			}
 		}
 	}
