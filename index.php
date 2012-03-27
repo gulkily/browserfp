@@ -48,8 +48,6 @@
 
 	#$screen_res_token = $ss->generateScreenResolutionToken();
 
-	$returnToken = $ss->getReturnToken();
-
 	#echo('<pre>');
 	#print_r($ss->getClientRecords());
 ?>
@@ -76,31 +74,13 @@ if ($print_client_name_form) {
 
 ?>
 
-<script>
-<!--
-	var rurl = '';
-	function returnUrl(n, v) {
-		if (rurl == '') {
-			rurl = 'updatesession.php?token=<?php echo $returnToken ?>';
-		}
-		if (n && v) {
-			rurl = rurl + '&' + n + '=' + v;
-		}
-		return rurl;
-	}
+<?php
 
-	returnUrl('iw', window.innerWidth);
-	returnUrl('ih', window.innerHeight);
+	echo('<script><!--');
+	echo ($ss->getJsBlock());
+	echo('// --></script>');
 
-	var d = new Date();
-	returnUrl('toff', Math.round(<?php echo time()?> - d.getTime()/1000));
-
-	document.write('<p><a href="' + returnUrl() + '&verbose=1">call updatesession.php manually</a></p>');
-
-	document.write('<p>tracking gif: <img src="' + returnUrl() + '"></p>');
-
--->
-</script>
+?>
 
 
 <?php

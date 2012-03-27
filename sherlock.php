@@ -6,7 +6,7 @@
 		function __construct($db) {
 			$this->db = $db;
 
-			$dbVersion = 7; #todo remove this hack
+			$dbVersion = 8; #todo remove this hack
 			if (!$this->dbVersionCurrent($dbVersion)) {
 				die("OH NO! wrong db version!<br>check the sherlock_config table!");
 			}
@@ -16,6 +16,35 @@
 			$this->tokens = array();
 
 			$this->populateFieldDefs();
+		}
+
+		function getJsBlock() {
+			$token = $this->getReturnToken();
+
+			$jsBlock = "
+	var rurl = '';
+	function returnUrl(n, v) {
+		if (rurl == '') {
+			rurl = 'updatesession.php?token=<?php echo ".$returnToken." ?>';
+		}
+		if (n && v) {
+			rurl = rurl + '&' + n + '=' + v;
+		}
+		return rurl;
+	}
+
+	returnUrl('iw', window.innerWidth);
+	returnUrl('ih', window.innerHeight);
+
+	var d = new Date();
+	returnUrl('toff', Math.round(<?php echo time()?> - d.getTime()/1000));
+
+	document.write('<p><a href=\"' + returnUrl() + '&verbose=1\">call updatesession.php manually</a></p>');
+
+	document.write('<p>tracking gif: <img src=\"' + returnUrl() + '\"></p>');
+			";
+
+			return $jsBlock;
 		}
 
 		function getSessionSimilarity($session, $match_only = true) {
@@ -318,10 +347,10 @@
 			}
 
 			$query =
-				"SELECT DISTINCT client_record_v.client_id, fp_record.record_id, record_client_count_v.client_count ".
-				" FROM fp_record, client_record_v, record_client_count_v".
+				"SELECT DISTINCT client_record_v.client_id, fp_record.record_id, record_client_count.client_count ".
+				" FROM fp_record, client_record_v, record_client_count".
 				" WHERE fp_record.record_id = client_record_v.record_id ".
-				" AND client_record_v.client_id = record_client_count_v.record_id ".
+				" AND client_record_v.client_id = record_client_count.record_id ".
 				" AND ";
 
 			$comma = 0;
@@ -357,6 +386,9 @@
 
 				asort($cp);
 				$cp = array_reverse($cp, true);
+
+				$cp_list = implode(',', $cp);
+				print_r($cp_list);
 
 				foreach ($cp as $client => $probability) {
 					if ($probability > 0.5) { #todo make this configurable or calculated

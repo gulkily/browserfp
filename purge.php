@@ -1,3 +1,4 @@
+<title>purge</title>
 <?php
 	include_once('database.php');
 
