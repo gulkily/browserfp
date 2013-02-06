@@ -407,13 +407,15 @@
 		function getClientId() {
 			if (isset($this->client_id)) {
 				return $this->client_id;
-			}
+			} else {
+				$client_id = $this->setClientByFingerprints();
 
-			$client_id = $this->setClientByFingerprints();
-
-			if (!$client_id) {
-				$client_id = $this->createClient();
+				if (!$client_id) {
+					$client_id = $this->createClient();
+				}
 			}
+			
+			$client_id = intval($client_id);
 
 			return $client_id;
 		}
