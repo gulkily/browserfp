@@ -150,8 +150,8 @@
 			$this->globals = $globals;
 
 			foreach($PrintDefs as $key => $value) {
-				$mn = 'get'.$value;
-				$this->fingerprints[$value] = $this->$mn();
+				$methodName = 'get'.$value;
+				$this->fingerprints[$value] = $this->$methodName();
 			}
 
 			if ($this->getValidationToken()) {
