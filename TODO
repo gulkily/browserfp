@@ -18,7 +18,7 @@ BRAINSTORM
   * flag clients that repeatedly don't claim cookies?
 * use hotness formula based on session_record timestamps (newer = more likely)
 * integrate evercookie
-* integrate cache.php
+* add db caching
 * create profiles / modes to use (e.g. silent, cookie-based, aggressive, etc.)
   * sets of datapoints to use / ignore
   * programmatically switch profiles as necessary
