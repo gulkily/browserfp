@@ -3,25 +3,19 @@ OVERVIEW
 a framework for identifying web clients based on commonly available datapoints
 currently in prototype stage, don't expect any pretty code
 
-KNOWN ISSUES
-
-before importing sherlock.sql, you have to remove all instances of this line:
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-
 PURPOSE
 
 to demonstrate ease of tracking web clients using commonly divulged data
 
-OTHER POSSIBLE USES
+POSSIBLE USES
 
 * reduce occurrence of ballot stuffing in online voting
-* gain better understanding of user base
+* gain better understanding of users' habits
 * improve account security by identifying unusual activity
-* blacklisting of undesirable clients, e.g. frequent trolls
+* induce paranoia
 
 DATAPOINTS SUPPORTED
 
-* cookie
 * useragent
   * os
 * client ip
@@ -30,6 +24,8 @@ DATAPOINTS SUPPORTED
 
 * browser height
 * browser width
+
+* cookie
 
 FILES
 
@@ -49,3 +45,7 @@ sherlock.sql
 updatesession.php
   used to log tokened datapoins from js, img tags, and the like
 
+KNOWN ISSUES
+
+before importing sherlock.sql, you have to remove all instances of this line:
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
