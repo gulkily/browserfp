@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.5.20, for Win64 (x86)
 --
--- Host: localhost    Database: sherlock
+-- Host: localhost    Database: browserfp
 -- ------------------------------------------------------
 -- Server version	5.5.20-log
 
