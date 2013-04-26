@@ -40,12 +40,17 @@ purge.php
   purges all tracking data from the db - no warning!
 sherlock.php
   where all the fun stuff happens
-sherlock.sql
+tables.sql
   database structure and some random data
 updatesession.php
   used to log tokened datapoins from js, img tags, and the like
 
 KNOWN ISSUES
 
-before importing sherlock.sql, you have to remove all instances of this line:
+before importing tables.sql, you have to remove all instances of this line:
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+
+PREVIOUSLY
+
+[evercookie]
+[browser fingerprint uniquness study]
