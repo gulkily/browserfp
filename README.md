@@ -52,7 +52,7 @@ before importing tables.sql, you have to remove all instances of this line:
 
 SEE ALSO
 
-http://samy.pl/evercookie/
-https://panopticlick.eff.org/browser-uniqueness.pdf
-http://en.wikipedia.org/wiki/Device_fingerprint
-http://fingerprint.pet-portal.eu/
+* http://samy.pl/evercookie/
+* https://panopticlick.eff.org/browser-uniqueness.pdf
+* http://en.wikipedia.org/wiki/Device_fingerprint
+* http://fingerprint.pet-portal.eu/
