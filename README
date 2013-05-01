@@ -50,7 +50,7 @@ KNOWN ISSUES
 before importing tables.sql, you have to remove all instances of this line:
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 
-PREVIOUSLY
+SEE ALSO
 
-[evercookie]
-[browser fingerprint uniquness study]
+http://samy.pl/evercookie/
+https://panopticlick.eff.org/browser-uniqueness.pdf
