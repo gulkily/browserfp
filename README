@@ -1,53 +1,47 @@
 OVERVIEW
 
-a framework for identifying web clients based on commonly available datapoints
-currently in prototype stage, don't expect any pretty code
+Framework for identifying web clients based on commonly available datapoints.
 
 PURPOSE
 
-to demonstrate ease of tracking web clients using commonly divulged data
+Track web clients using commonly divulged data.
 
 POSSIBLE USES
 
-* reduce impact of ballot stuffing in voting systems
-* gain better understanding of users' habits
-* identify unusual activity
-* induce paranoia
+* Reduce impact of ballot stuffing in voting systems
+* Gain better understanding of users' habits
+* Identify unusual activity
+* Induce paranoia
 
 DATAPOINTS SUPPORTED
 
-* useragent
-  * os
-* client ip
-  * client ip block
-* accepted languages
-
-* browser height
-* browser width
-
-* cookie
+* Useragent and operating system
+* Client IP and IP block
+* Accepted languages
+* Browser height and width
+* Cookie
 
 FILES
 
 database.php
-  just the database config
+  Database config
 ez_sql_core.php
 ez_sql_mysql.php
-  parts of ezSQL for easy prototyping (thanks jv!)
+  Parts of ezSQL for easy prototyping (thanks jv!)
 index.php
-  just a wrapper
+  Wrapper for the demo
 purge.php
-  purges all tracking data from the db - no warning!
+  Purges all tracking data from the db - no warning!
 sherlock.php
-  where all the fun stuff happens
+  Where all the fun stuff happens
 tables.sql
-  database structure and some random data
+  Database structure and some random data
 updatesession.php
-  used to log tokened datapoins from js, img tags, and the like
+  Used to log tokened datapoins from client-side JS and image tags
 
 KNOWN ISSUES
 
-before importing tables.sql, you have to remove all instances of this line:
+Before importing tables.sql, you have to remove all instances of this line:
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 
 SEE ALSO
