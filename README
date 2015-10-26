@@ -39,11 +39,6 @@ tables.sql
 updatesession.php
   Used to log tokened datapoins from client-side JS and image tags
 
-KNOWN ISSUES
-
-Before importing tables.sql, you have to remove all instances of this line:
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-
 SEE ALSO
 
 * http://samy.pl/evercookie/
